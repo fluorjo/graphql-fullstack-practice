@@ -1,0 +1,9 @@
+{
+  "name": "graphql-book-fullstack-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/fluorjo/graphql-fullstack-practice.git",
+  "author": "fluorjo <fluorjo@naver.com>",
+  "license": "MIT",
+  "private": true
+}
