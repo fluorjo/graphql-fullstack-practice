@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon --watch *.ts --exec ts-node src/index.ts"
   },
   "name": "server",
   "version": "1.0.0",
@@ -8,11 +9,16 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "apollo-server-core": "^3.12.1",
     "apollo-server-express": "^3.12.1",
     "express": "^4.18.2",
     "graphql": "^16.8.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
     "ts-node": "^10.9.1"
   }
 }
