@@ -3,5 +3,7 @@
         "target": "ES5",
         "module": "CommonJS",
         "experimentalDecorators":true,
+        "esModuleInterop": true,
+
         }
 }
