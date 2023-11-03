@@ -1,1 +1,1 @@
-- ㅇㄹ
+- [tsconfig](https://codingapple.com/unit/typescript-tsconfig-json/)
