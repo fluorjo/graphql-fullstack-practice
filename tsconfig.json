@@ -2,8 +2,11 @@
     "compilerOptions": {
         "target": "ES5",
         "module": "CommonJS",
-        "experimentalDecorators":true,
+        "experimentalDecorators": true,
         "esModuleInterop": true,
-
-        }
+        "emitDecoratorMetadata": true,
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }
