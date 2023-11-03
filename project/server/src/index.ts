@@ -1,8 +1,8 @@
 import 'reflect-metadata'
+import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core'
+import { ApolloServer, gql } from 'apollo-server-express'
 import express from 'express'
-import {ApolloServer, gql} from 'apollo-server-express'
-import {ApolloServerPluginLandingPageLocalDefault} from 'apollo-server-core'
-import http from 'http'
+import * as http from 'http'
 
 async function main() {
   const app = express()
@@ -21,7 +21,7 @@ async function main() {
     plugins: [ApolloServerPluginLandingPageLocalDefault()],
   })
   await apolloServer.start()
-  apolloServer.applyMiddleware({app})
+  apolloServer.applyMiddleware({ app })
   const httpServer = http.createServer(app)
 
   httpServer.listen(process.env.PORT || 4000, () => {
@@ -37,4 +37,4 @@ async function main() {
   })
 }
 
-main().catch(err => console.error(err))
+main().catch((err) => console.error(err))
