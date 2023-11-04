@@ -1,25 +1,7 @@
-import { gql, useQuery } from '@apollo/client'
-console.error = (error) => error.apply
+import { useFilmsQuery } from '../../generated/graphql'
 
-interface Film {
-  id: number
-  title: string
-  subtitle: string
-}
-
-type FilmQueryResult = { films: Film[] }
-
-const FILMS_QUERY = gql`
-  query ExampleQuery {
-    films {
-      id
-      title
-      subtitle
-    }
-  }
-`
 export default function FilmList(): JSX.Element {
-  const { data, loading, error } = useQuery(FILMS_QUERY)
+  const { data, loading, error } = useFilmsQuery()
 
   if (loading) return <p>loading</p>
   if (error) return <p>{error.message}</p>
