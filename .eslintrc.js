@@ -19,6 +19,7 @@ module.exports = {
       'error',
       {
         endOfLine: 'auto',
+        useTabs: false,
       },
     ],
 
@@ -56,7 +57,7 @@ module.exports = {
     // react
     'react/jsx-filename-extension': [
       2,
-      {extensions: ['.js', '.jsx', '.ts', '.tsx']},
+      { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
     ],
     'react/require-default-props': 0,
     'react/jsx-props-no-spreading': 1,
@@ -66,7 +67,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
     // typescript
     '@typescript-eslint/no-use-before-define': 2,
-    '@typescript-eslint/no-unused-vars': ['warn', {argsIgnorePattern: '^_'}],
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
   },
   ignorePatterns: ['generated/**/*.tsx'],
   settings: {

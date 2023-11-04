@@ -1,0 +1,13 @@
+query Films{
+      films{
+            id
+            title
+            subtitle
+            runningTime
+            release
+            posterImg
+            director{
+                  name
+            }
+      }
+}
