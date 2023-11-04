@@ -3,5 +3,9 @@ query Films{
             id
             title
             subtitle
+            runningTime
+            director_id
+            release
+            posterImg
       }
 }
