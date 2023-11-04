@@ -1,4 +1,13 @@
 import { gql, useQuery } from '@apollo/client'
+console.error = (error) => error.apply
+
+interface Film {
+  id: number
+  title: string
+  subtitle: string
+}
+
+type FilmQueryResult = { films: Film[] }
 
 const FILMS_QUERY = gql`
   query ExampleQuery {
