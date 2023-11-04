@@ -4,8 +4,10 @@ query Films{
             title
             subtitle
             runningTime
-            director_id
             release
             posterImg
+            director{
+                  name
+            }
       }
 }
