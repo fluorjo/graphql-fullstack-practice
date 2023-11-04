@@ -13,10 +13,6 @@ const FILMS_QUERY = gql`
     }
   }
 `
-export default function FilmList(): JSX.Element {
-  const { data, loading, error } = useQuery(FILMS_QUERY)
-
-import { useFilmsQuery } from '../../generated/graphql'
 
 export default function FilmList(): JSX.Element {
   const { data, loading, error } = useFilmsQuery()
