@@ -1,15 +1,18 @@
-query Films {
-  films {
-    id
-    title
-    subtitle
-    runningTime
-    release
-    posterImg
-    director {
-      name
+query Films($limit: Int, $cursor: Int) {
+  films(limit: $limit, cursor: $cursor) {
+    cursor
+    films {
+      id
+      title
+      subtitle
+      runningTime
+      release
+      posterImg
+      director {
+        name
+      }
+      release
+      posterImg
     }
-    release
-    posterImg
   }
 }

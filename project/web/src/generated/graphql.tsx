@@ -46,41 +46,69 @@ export type Film = {
   director: Director;
 };
 
-export type Query = {
-  __typename?: 'Query';
+export type PaginatedFilms = {
+  __typename?: 'PaginatedFilms';
   films: Array<Film>;
+  cursor?: Maybe<Scalars['Int']>;
 };
 
-export type FilmsQueryVariables = Exact<{ [key: string]: never; }>;
+export type Query = {
+  __typename?: 'Query';
+  films: PaginatedFilms;
+  film?: Maybe<Film>;
+};
+
+
+export type QueryFilmsArgs = {
+  cursor?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryFilmArgs = {
+  filmId: Scalars['Int'];
+};
+
+export type FilmsQueryVariables = Exact<{
+  limit?: Maybe<Scalars['Int']>;
+  cursor?: Maybe<Scalars['Int']>;
+}>;
 
 
 export type FilmsQuery = (
   { __typename?: 'Query' }
-  & { films: Array<(
-    { __typename?: 'Film' }
-    & Pick<Film, 'id' | 'title' | 'subtitle' | 'runningTime' | 'release' | 'posterImg'>
-    & { director: (
-      { __typename?: 'Director' }
-      & Pick<Director, 'name'>
-    ) }
-  )> }
+  & { films: (
+    { __typename?: 'PaginatedFilms' }
+    & Pick<PaginatedFilms, 'cursor'>
+    & { films: Array<(
+      { __typename?: 'Film' }
+      & Pick<Film, 'id' | 'title' | 'subtitle' | 'runningTime' | 'release' | 'posterImg'>
+      & { director: (
+        { __typename?: 'Director' }
+        & Pick<Director, 'name'>
+      ) }
+    )> }
+  ) }
 );
 
 
 export const FilmsDocument = gql`
-    query Films {
-  films {
-    id
-    title
-    subtitle
-    runningTime
-    release
-    posterImg
-    director {
-      name
+    query Films($limit: Int, $cursor: Int) {
+  films(limit: $limit, cursor: $cursor) {
+    cursor
+    films {
+      id
+      title
+      subtitle
+      runningTime
+      release
+      posterImg
+      director {
+        name
+      }
+      release
+      posterImg
     }
-    release
-    posterImg
   }
 }
     `;
@@ -97,6 +125,8 @@ export const FilmsDocument = gql`
  * @example
  * const { data, loading, error } = useFilmsQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      cursor: // value for 'cursor'
  *   },
  * });
  */
