@@ -23,7 +23,7 @@ export const App: React.FC = () => (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
         <Text>와 정말 신기해~~</Text>
-        <FilmList/>
+        <FilmList />
       </Box>
     </ChakraProvider>
   </ApolloProvider>

@@ -10,7 +10,9 @@ export default function FilmList(): JSX.Element {
   return (
     <SimpleGrid columns={[2, null, 3]} spacing={[2, null, 10]}>
       {loading &&
-        new Array(6).fill(0).map((x) => <Skeleton key={x} height="400px" />)}
+        new Array(6)
+          .fill(0)
+          .map((_, index) => <Skeleton key={index} height="400px" />)}
       {!loading &&
         data &&
         data.films.map((film) => (
