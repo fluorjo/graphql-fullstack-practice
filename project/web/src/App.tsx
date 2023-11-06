@@ -1,29 +1,20 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client'
 import * as React from 'react'
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from '@chakra-ui/react'
-import { ColorModeSwitcher } from './components/ColorModeSwitcher'
+import { ChakraProvider, Box, Text, theme } from '@chakra-ui/react'
 import FilmList from './components/film/FilmList'
-import { PaginatedFilms } from './generated/graphql'
-import {createApolloClient} from './apollo/createApolloClient'
+import { createApolloClient } from './apollo/createApolloClient'
 
+const apolloClient = createApolloClient()
 
-
-export const App: React.FC = () => (
-  <ApolloProvider client={apolloClient}>
-    <ChakraProvider theme={theme}>
-      <Box textAlign="center" fontSize="xl">
-        <Text>와 정말 신기해~~</Text>
+export const App: React.FC = () => {
+  return (
+    <ApolloProvider client={apolloClient}>
+      <ChakraProvider theme={theme}>
+        <Box>
+          <Text>와 정말 신기해~~</Text>
+        </Box>
         <FilmList />
-      </Box>
-    </ChakraProvider>
-  </ApolloProvider>
-)
+      </ChakraProvider>
+    </ApolloProvider>
+  )
+}
