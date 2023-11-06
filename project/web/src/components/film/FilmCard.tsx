@@ -12,7 +12,7 @@ import { FilmsQuery } from '../../generated/graphql'
 import React from 'react'
 
 interface FilmCardProps {
-  film: FilmsQuery['films'][0]
+  film: FilmsQuery['films']['films'][0]
 }
 
 export default function FilmCard({ film }: FilmCardProps): React.ReactElement {
