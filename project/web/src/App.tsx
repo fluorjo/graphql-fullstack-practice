@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { ColorModeSwitcher } from './components/ColorModeSwitcher'
 import FilmList from './components/film/FilmList'
+import { PaginatedFilms } from './generated/graphql'
 
 const apolloClient = new ApolloClient({
   uri: 'http://localhost:4000/graphql',
@@ -27,7 +28,7 @@ const apolloClient = new ApolloClient({
             ): PaginatedFilms => {
               return {
                 cursor: incoming.cursor,
-                films: exsiting
+                films: existing
                   ? [...existing.films, ...incoming.films]
                   : incoming.films,
               }
