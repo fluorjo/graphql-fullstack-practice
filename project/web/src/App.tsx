@@ -13,32 +13,9 @@ import {
 import { ColorModeSwitcher } from './components/ColorModeSwitcher'
 import FilmList from './components/film/FilmList'
 import { PaginatedFilms } from './generated/graphql'
+import {createApolloClient} from './apollo/createApolloClient'
 
-const apolloClient = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
-  cache: new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          films: {
-            keyArgs: false,
-            merge: (
-              existing: PaginatedFilms | undefined,
-              incoming: PaginatedFilms,
-            ): PaginatedFilms => {
-              return {
-                cursor: incoming.cursor,
-                films: existing
-                  ? [...existing.films, ...incoming.films]
-                  : incoming.films,
-              }
-            },
-          },
-        },
-      },
-    },
-  }),
-})
+
 
 export const App: React.FC = () => (
   <ApolloProvider client={apolloClient}>
