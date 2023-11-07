@@ -7,9 +7,11 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  LinkOverlay,
 } from '@chakra-ui/react'
 import { FilmsQuery } from '../../generated/graphql'
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 interface FilmCardProps {
   film: FilmsQuery['films']['films'][0]
@@ -32,13 +34,16 @@ export default function FilmCard({ film }: FilmCardProps): React.ReactElement {
           </AspectRatio>
         </Box>
         <Stack>
-          <Heading
-            color={useColorModeValue('gray.700', 'white')}
-            fontSize="xl"
-            fontFamily="body"
-          >
-            {film.title}
-          </Heading>
+          <LinkOverlay as={Link} to={`/film/${film.id}`}>
+            <Heading
+              color={useColorModeValue('gray.700', 'white')}
+              fontSize="xl"
+              fontFamily="body"
+            >
+              {film.title}
+            </Heading>
+          </LinkOverlay>
+
           <Text fontSize="sm" color="gray.500" isTruncated>
             {film.subtitle ? film.subtitle : <>&nbsp;</>}
           </Text>
