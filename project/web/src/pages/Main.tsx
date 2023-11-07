@@ -1,10 +1,11 @@
+import CommonLayout from '../components/CommonLayout'
 import FilmList from '../components/film/FilmList'
-import {Box,Heading} from '@chakra-ui/react'
+import { Box, Heading } from '@chakra-ui/react'
 export default function Main(): React.ReactElement {
   return (
-    <Box>
+    <CommonLayout>
       <Heading>와!!!</Heading>
       <FilmList />
-    </Box>
+    </CommonLayout>
   )
 }
