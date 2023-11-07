@@ -3,10 +3,10 @@ import CommonLayout from '../components/CommonLayout'
 import React from 'react'
 import { useFilmQuery } from '../generated/graphql'
 import { Box, Spinner, Text } from '@chakra-ui/react'
-
+import FilmDetail from '../components/film/FilmDetail'
 interface FilmPageParams {
   //  filmId: string;
-  [key: string]: string | undefined;
+  [key: string]: string | undefined
 }
 
 function Film(): React.ReactElement {
@@ -18,9 +18,11 @@ function Film(): React.ReactElement {
     <CommonLayout>
       {loading && <Spinner />}
       {error && <Text>페이지를 표시할 수 없습니다</Text>}
-      <Box>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
-      </Box>
+      {filmId && data?.film ? (
+        <FilmDetail film={data.film} />
+      ) : (
+        <Text>페이지를 표시할 수 없습니다</Text>
+      )}
     </CommonLayout>
   )
 }
