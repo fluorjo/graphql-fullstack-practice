@@ -15,6 +15,16 @@ export type Scalars = {
   Float: number;
 };
 
+export type Cut = {
+  __typename?: 'Cut';
+  /** 명장면 고유 아이디 */
+  id: Scalars['Int'];
+  /** 명장면 사진 주소 */
+  src: Scalars['String'];
+  /** 영화 아이디 */
+  filmId: Scalars['Int'];
+};
+
 export type Director = {
   __typename?: 'Director';
   /** 감독 고유 아이디 */
@@ -56,6 +66,7 @@ export type Query = {
   __typename?: 'Query';
   films: PaginatedFilms;
   film?: Maybe<Film>;
+  cuts: Array<Cut>;
 };
 
 
@@ -68,6 +79,24 @@ export type QueryFilmsArgs = {
 export type QueryFilmArgs = {
   filmId: Scalars['Int'];
 };
+
+
+export type QueryCutsArgs = {
+  filmId: Scalars['Int'];
+};
+
+export type CutsQueryVariables = Exact<{
+  filmId: Scalars['Int'];
+}>;
+
+
+export type CutsQuery = (
+  { __typename?: 'Query' }
+  & { cuts: Array<(
+    { __typename?: 'Cut' }
+    & Pick<Cut, 'id' | 'src'>
+  )> }
+);
 
 export type FilmQueryVariables = Exact<{
   filmId: Scalars['Int'];
@@ -109,6 +138,42 @@ export type FilmsQuery = (
 );
 
 
+export const CutsDocument = gql`
+    query cuts($filmId: Int!) {
+  cuts(filmId: $filmId) {
+    id
+    src
+  }
+}
+    `;
+
+/**
+ * __useCutsQuery__
+ *
+ * To run a query within a React component, call `useCutsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCutsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCutsQuery({
+ *   variables: {
+ *      filmId: // value for 'filmId'
+ *   },
+ * });
+ */
+export function useCutsQuery(baseOptions: Apollo.QueryHookOptions<CutsQuery, CutsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CutsQuery, CutsQueryVariables>(CutsDocument, options);
+      }
+export function useCutsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CutsQuery, CutsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CutsQuery, CutsQueryVariables>(CutsDocument, options);
+        }
+export type CutsQueryHookResult = ReturnType<typeof useCutsQuery>;
+export type CutsLazyQueryHookResult = ReturnType<typeof useCutsLazyQuery>;
+export type CutsQueryResult = Apollo.QueryResult<CutsQuery, CutsQueryVariables>;
 export const FilmDocument = gql`
     query film($filmId: Int!) {
   film(filmId: $filmId) {
