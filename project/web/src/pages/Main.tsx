@@ -1,6 +1,6 @@
 import CommonLayout from '../components/CommonLayout'
 import FilmList from '../components/film/FilmList'
-import { Box, Heading } from '@chakra-ui/react'
+import {  Heading } from '@chakra-ui/react'
 export default function Main(): React.ReactElement {
   return (
     <CommonLayout>
