@@ -3714,10 +3714,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-lazyload@^3.1.1":
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/@types/react-lazyload/-/react-lazyload-3.2.2.tgz#06b0bec247a666248fb82c9c5498499cd9df47d6"
-  integrity sha512-dNIH60+lGv5JBEXBRnHjUbfamLfHGDJ16ODZNBCHYozDSUOD8JAAT4b/lhg7Q3srCVAz+IaN4eZ+dYMAwJlNFA==
+"@types/react-lazyload@^3.2.3":
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/@types/react-lazyload/-/react-lazyload-3.2.3.tgz#42129b6e11353bfe8ed2ba5e1b964676ee23668b"
+  integrity sha512-s03gWlHXiFqZr7TEFDTx8Lkl+ZEYrwTkXP9MNZ3Z3blzsPrnkYjgeSK2tjfzVv/TYVCnDk6TZwNRDHQlHy/1Ug==
   dependencies:
     "@types/react" "*"
 
@@ -10713,6 +10713,11 @@ react-is@^17.0.1:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
+
+react-lazyload@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/react-lazyload/-/react-lazyload-3.2.0.tgz#497bd06a6dbd7015e3376e1137a67dc47d2dd021"
+  integrity sha512-zJlrG8QyVZz4+xkYZH5v1w3YaP5wEFaYSUWC4CT9UXfK75IfRAIEdnyIUF+dXr3kX2MOtL1lUaZmaQZqrETwgw==
 
 react-refresh@^0.11.0:
   version "0.11.0"
