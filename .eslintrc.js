@@ -22,6 +22,12 @@ module.exports = {
         useTabs: false,
       },
     ],
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        Dependencies: ['**/webpack.*.js'],
+      },
+    ],
 
     semi: ['error', 'never'],
     'max-len': [
