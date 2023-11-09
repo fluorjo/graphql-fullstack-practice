@@ -63,3 +63,5 @@ function FilmCutModal({
     </Modal>
   )
 }
+
+export default FilmCutModal
