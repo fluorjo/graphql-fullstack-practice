@@ -8,6 +8,7 @@ import { buildSchema } from 'type-graphql'
 import { FilmResolver } from './resolvers/Film'
 import { CutResolver } from './resolvers/Cut'
 import { createDB } from './db/db-client'
+import { UserResolver } from './resolvers/User'
 
 async function main() {
   createDB
@@ -18,13 +19,13 @@ async function main() {
     .catch((err) => {
       console.error('Error during Data Source initialization', err)
     })
-    
+
   const app = express()
 
   const apolloServer = new ApolloServer({
     // buildSchema=리졸버를 토대로 graphql 스키마를 자동으로 생성. apollo 서버는 생성된 스키마와 그에 연결된 리졸버를 통해 graphql 서버를 구성.
     schema: await buildSchema({
-      resolvers: [FilmResolver, CutResolver],
+      resolvers: [FilmResolver, CutResolver, UserResolver],
     }),
     plugins: [ApolloServerPluginLandingPageLocalDefault()],
   })
