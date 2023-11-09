@@ -1,0 +1,10 @@
+# project/web/src/graphql/mutations/signUp.graphql
+mutation signUp($signUpInput: SignUpInput!) {
+  signUp(signUpInput: $signUpInput) {
+    email
+    username
+    createAt
+    updatedAt
+    id
+  }
+}
