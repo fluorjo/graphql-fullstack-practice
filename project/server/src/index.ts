@@ -7,8 +7,18 @@ import * as http from 'http'
 import { buildSchema } from 'type-graphql'
 import { FilmResolver } from './resolvers/Film'
 import { CutResolver } from './resolvers/Cut'
+import { createDB } from './db/db-client'
 
 async function main() {
+  createDB
+    .initialize()
+    .then(() => {
+      console.log('Data Source has been initialized!')
+    })
+    .catch((err) => {
+      console.error('Error during Data Source initialization', err)
+    })
+    
   const app = express()
 
   const apolloServer = new ApolloServer({
