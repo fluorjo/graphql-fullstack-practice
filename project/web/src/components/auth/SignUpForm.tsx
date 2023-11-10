@@ -30,8 +30,27 @@ function SignUpRealForm() {
     formState: { errors },
   } = useForm<SignUpMutationVariables>()
   const navigate = useNavigate()
-
   const toast = useToast()
+
+  const onSubmit = async (data: SignUpMutationVariables) => {
+    const { signUpInput } = data
+    return signUp({ variables: { signUpInput } })
+      .then((res) => {
+        if (res.data?.signUp) {
+          toast({ title: 'welcome~~~~`', status: 'success' })
+          navigate('/')
+        } else {
+          toast({
+            title: '에러 발생',
+            status: 'error',
+          })
+        }
+      })
+      .catch((err) => {
+        toast({ title: 'This email or id is already in use', status: 'error' })
+        return err
+      })
+  }
 
   return (
     <Stack
