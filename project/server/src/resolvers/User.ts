@@ -1,5 +1,10 @@
 import argon2 from 'argon2'
-
+import {
+  createAccessToken,
+  // createRefreshToken,
+  // REFRESH_JWT_SECRET_KEY,
+  // setRefreshTokenHeader,
+} from '../utils/jwt-auth'
 import User from '../entities/User'
 import { IsEmail, IsString } from 'class-validator'
 import {
@@ -87,7 +92,10 @@ export class UserResolver {
       return {
         errors: [{ field: 'password', message: 'please check password' }],
       }
-    return { user }
+
+    const accessToken = createAccessToken(user)
+
+    return { user, accessToken }
     // 엑세스 토큰 발급
   }
 }
