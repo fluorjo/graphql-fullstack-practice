@@ -18,6 +18,8 @@ import {
   Resolver,
   UseMiddleware,
 } from 'type-graphql'
+import { MyContext } from '../apollo/createApolloServer'
+import { isAuthenticated } from '../middlewares/isAuthenticated'
 
 @InputType()
 export class SignUpInput {
@@ -57,6 +59,12 @@ class LoginResponse {
 
 @Resolver(User)
 export class UserResolver {
+  @UseMiddleware(isAuthenticated)
+  @Query(() => User, { nullable: true })
+  async me(@Ctx() ctx: MyContext): Promise<User | undefined> {
+    if (!ctx.verifiedUser) return undefined
+    return User.findOne({ where: { id: ctx.verifiedUser.userId } })
+  }
   @Mutation(() => User)
   async signUp(@Arg('signUpInput') signUpInput: SignUpInput): Promise<User> {
     const { email, username, password } = signUpInput
