@@ -3,7 +3,7 @@ mutation signUp($signUpInput: SignUpInput!) {
   signUp(signUpInput: $signUpInput) {
     email
     username
-    createAt
+    createdAt
     updatedAt
     id
   }

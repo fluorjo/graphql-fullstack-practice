@@ -1,0 +1,10 @@
+# project/web/src/graphql/queries/me.graphql
+query me {
+  me {
+    id
+    username
+    email
+    updatedAt
+    createdAt
+  }
+}
