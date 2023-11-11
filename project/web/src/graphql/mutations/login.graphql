@@ -1,0 +1,16 @@
+# project/web/src/graphql/mutations/login.graphql
+
+mutation login($loginInput: LoginInput!) {
+  login(loginInput: $loginInput) {
+    errors {
+      field
+      message
+    }
+    user {
+      id
+      username
+      email
+    }
+    accessToken
+  }
+}
