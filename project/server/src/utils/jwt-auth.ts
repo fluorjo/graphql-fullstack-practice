@@ -40,3 +40,18 @@ export const verifyAccessToken = (
     throw new AuthenticationError('access token expired')
   }
 }
+
+/** req, headers 로부터 엑세스 토큰 검증 */
+export const verifyAccessTokenFromReqHeaders = (
+  headers: IncomingHttpHeaders,
+): JwtVerifiedUser | null => {
+  const { authorization } = headers
+  if (!authorization) return null
+
+  const accessToken = authorization.split(' ')[1]
+  try {
+    return verifyAccessToken(accessToken)
+  } catch {
+    return null
+  }
+}
