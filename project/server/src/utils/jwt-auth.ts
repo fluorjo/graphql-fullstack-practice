@@ -19,7 +19,7 @@ export const createAccessToken = (user: User): string => {
   const accessToken = jwt.sign(
     userData,
     process.env.JWT_SECRET_KEY || DEFAULT_JWT_SECRET_KEY,
-    { expiresIn: '30m' },
+    { expiresIn: '10s' },
   )
   return accessToken
 }

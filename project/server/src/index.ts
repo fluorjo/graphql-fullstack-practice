@@ -7,6 +7,7 @@ import * as http from 'http'
 import { createDB } from './db/db-client'
 import 'reflect-metadata'
 import createApolloServer from './apollo/createApolloServer'
+import cookieParser from 'cookie-parser'
 
 async function main() {
   createDB
@@ -19,6 +20,8 @@ async function main() {
     })
 
   const app = express()
+  app.use(cookieParser())
+
   const apolloServer = await createApolloServer()
 
   await apolloServer.start()

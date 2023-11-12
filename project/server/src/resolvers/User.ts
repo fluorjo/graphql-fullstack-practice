@@ -1,4 +1,6 @@
 import argon2 from 'argon2'
+import jwt from 'jsonwebtoken'
+
 import {
   createAccessToken,
   createRefreshToken,
@@ -53,10 +55,10 @@ class LoginResponse {
   accessToken?: string
 }
 
-// @ObjectType({ description: 'Refresh access token reponse data' })
-// class RefreshAccessTokenResponse {
-//   @Field() accessToken: string
-// }
+@ObjectType({ description: 'Refresh access token reponse data' })
+class RefreshAccessTokenResponse {
+  @Field() accessToken: string
+}
 
 @Resolver(User)
 export class UserResolver {
@@ -82,7 +84,7 @@ export class UserResolver {
   @Mutation(() => LoginResponse)
   public async login(
     @Arg('loginInput') loginInput: LoginInput,
-    @Ctx() { res }: MyContext,
+    @Ctx() { res, redis }: MyContext,
   ): Promise<LoginResponse> {
     const { emailOrUsername, password } = loginInput
 
@@ -105,9 +107,48 @@ export class UserResolver {
     // 엑세스, 리프레쉬  토큰 발급
     const accessToken = createAccessToken(user)
     const refreshToken = createRefreshToken(user)
-
+    // 리프레쉬 토큰 레디스 적재
+    await redis.set(String(user.id), refreshToken)
+    // 쿠키로 리프레쉬 토큰 전송
     setRefreshTokenHeader(res, refreshToken)
 
     return { user, accessToken }
+  }
+
+  @Mutation(() => RefreshAccessTokenResponse, { nullable: true })
+  async refreshAccessToken(
+    @Ctx() { req, redis, res }: MyContext,
+  ): Promise<RefreshAccessTokenResponse | null> {
+    const refreshToken = req.cookies.refreshtoken
+    if (!refreshToken) return null
+
+    let tokenData: any = null
+    try {
+      tokenData = jwt.verify(refreshToken, REFRESH_JWT_SECRET_KEY)
+    } catch (e) {
+      console.error(e)
+      return null
+    }
+    if (!tokenData) return null
+
+    // redis에 user.id로 저장된 토큰 조회
+    const storedRefreshToken = await redis.get(String(tokenData.userId))
+    if (!storedRefreshToken) return null
+    if (!(storedRefreshToken === refreshToken)) return null
+    const user = await User.findOne({ where: { id: tokenData.userId } })
+    if (!user) return null
+
+    const newAccessToken = createAccessToken(user)
+    const newRefreshToken = createRefreshToken(user)
+    // refreshtoken을 redis에 저장
+    await redis.set(String(user.id), newRefreshToken)
+
+    //쿠키로 리프레쉬 토큰 전송
+    res.cookie('refreshtoken', newRefreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+    })
+    return { accessToken: newAccessToken }
   }
 }

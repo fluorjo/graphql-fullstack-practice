@@ -11,3 +11,6 @@
   - docker network create redis-network
   - docker network connect redis-network redis-container 
   - docker run -it --network redis-network --rm redis redis-cli -h redis-container
+
+  - docker exec -it redis-container /bin/bash
+  - redis-cli
