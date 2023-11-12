@@ -3,28 +3,42 @@ import {
   NormalizedCacheObject,
   from,
   HttpLink,
+  fromPromise,
 } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 import { createApolloCache } from './createApolloCache'
 import { setContext } from '@apollo/client/link/context'
+import { refreshAccessToken } from './auth'
+let apolloClient: ApolloClient<NormalizedCacheObject>
 
-const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
-  if (graphQLErrors) {
-    graphQLErrors.forEach(({ message, locations, path }) =>
-      console.log(
-        `[GraphQl error]: -> ${operation.operationName}
+const errorLink = onError(
+  ({ graphQLErrors, networkError, operation, forward }) => {
+    if (graphQLErrors) {
+      if (graphQLErrors) {
+        if (
+          graphQLErrors.find((err) => err.message === 'access token expired')
+        ) {
+          return fromPromise(refreshAccessToken(apolloClient, operation))
+            .filter((result) => !!result)
+            .flatMap(() => forward(operation))
+        }
+      }
+      graphQLErrors.forEach(({ message, locations, path }) =>
+        console.log(
+          `[GraphQl error]: -> ${operation.operationName}
     Message: ${message},Query:${path}, Location: ${JSON.stringify(locations)}`,
-      ),
-    )
-  }
+        ),
+      )
+    }
 
-  if (networkError) {
-    console.log(
-      `[GraphQl error]: -> ${operation.operationName}
+    if (networkError) {
+      console.log(
+        `[networkError]: -> ${operation.operationName}
     Message: ${networkError.message}`,
-    )
-  }
-})
+      )
+    }
+  },
+)
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:4000/graphql',
