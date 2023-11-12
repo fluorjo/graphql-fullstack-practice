@@ -1,0 +1,7 @@
+# project/web/src/graphql/mutations/refreshAccessToken.graphql
+
+mutation refreshAccessToken {
+  refreshAccessToken {
+    accessToken
+  }
+}
