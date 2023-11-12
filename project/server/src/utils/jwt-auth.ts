@@ -4,8 +4,10 @@ import User from '../entities/User'
 import jwt from 'jsonwebtoken'
 import { AuthenticationError } from 'apollo-server-core'
 import { IncomingHttpHeaders } from 'http'
+import { Response } from 'express'
 
 export const DEFAULT_JWT_SECRET_KEY = 'secret-key'
+export const REFRESH_JWT_SECRET_KEY = 'secret-key2'
 
 export interface JwtVerifiedUser {
   userId: User['id']
@@ -23,6 +25,16 @@ export const createAccessToken = (user: User): string => {
 }
 
 /**리프레시 토큰 발급 */
+export const createRefreshToken = (user: User): string => {
+  const userData: JwtVerifiedUser = { userId: user.id }
+  return jwt.sign(
+    userData,
+    process.env.JWT_REFRESH_SECRET_KEY || REFRESH_JWT_SECRET_KEY,
+    {
+      expiresIn: '14d',
+    },
+  )
+}
 
 /**엑세스 토큰 검증 */
 export const verifyAccessToken = (
@@ -54,4 +66,16 @@ export const verifyAccessTokenFromReqHeaders = (
   } catch {
     return null
   }
+}
+
+export const setRefreshTokenHeader = (
+  res: Response,
+  refreshToken: string,
+): void => {
+  res.cookie('refreshtoken', refreshToken, {
+    //js 코드로 접근 불가능하게 설정
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+  })
 }

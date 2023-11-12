@@ -1,9 +1,10 @@
 import argon2 from 'argon2'
 import {
   createAccessToken,
-  // createRefreshToken,
-  // REFRESH_JWT_SECRET_KEY,
-  // setRefreshTokenHeader,
+  createRefreshToken,
+  REFRESH_JWT_SECRET_KEY,
+  setRefreshTokenHeader,
+  //setRefreshTokenHeader,
 } from '../utils/jwt-auth'
 import User from '../entities/User'
 import { IsEmail, IsString } from 'class-validator'
@@ -81,7 +82,7 @@ export class UserResolver {
   @Mutation(() => LoginResponse)
   public async login(
     @Arg('loginInput') loginInput: LoginInput,
-    //@Ctx() { res, redis }: MyContext,
+    @Ctx() { res }: MyContext,
   ): Promise<LoginResponse> {
     const { emailOrUsername, password } = loginInput
 
@@ -101,9 +102,12 @@ export class UserResolver {
         errors: [{ field: 'password', message: 'please check password' }],
       }
 
+    // 엑세스, 리프레쉬  토큰 발급
     const accessToken = createAccessToken(user)
+    const refreshToken = createRefreshToken(user)
+
+    setRefreshTokenHeader(res, refreshToken)
 
     return { user, accessToken }
-    // 엑세스 토큰 발급
   }
 }
