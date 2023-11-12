@@ -10,6 +10,7 @@ import { UserResolver } from '../resolvers/User'
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core'
 import { Request, Response } from 'express'
 
+
 export interface MyContext {
   req: Request
   res: Response
@@ -28,4 +29,6 @@ const createApolloServer = async (): Promise<ApolloServer> => {
     },
   })
 }
+
+
 export default createApolloServer
