@@ -14,19 +14,17 @@ let apolloClient: ApolloClient<NormalizedCacheObject>
 const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
-      if (graphQLErrors) {
-        if (
-          graphQLErrors.find((err) => err.message === 'access token expired')
-        ) {
-          return fromPromise(refreshAccessToken(apolloClient, operation))
-            .filter((result) => !!result)
-            .flatMap(() => forward(operation))
-        }
+      if (graphQLErrors.find((err) => err.message ==='access_token_expired')) {
+        return fromPromise(refreshAccessToken(apolloClient, operation))
+          .filter((result) => !!result)
+          .flatMap(() => forward(operation))
       }
       graphQLErrors.forEach(({ message, locations, path }) =>
         console.log(
           `[GraphQl error]: -> ${operation.operationName}
-    Message: ${message},Query:${path}, Location: ${JSON.stringify(locations)}`,
+          Message: ${message},Query:${path}, Location: ${JSON.stringify(
+            locations,
+          )}`,
         ),
       )
     }

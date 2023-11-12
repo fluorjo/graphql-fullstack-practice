@@ -7,8 +7,10 @@ import {
 export const refreshAccessToken = (
   _apolloClient: ApolloClient<NormalizedCacheObject>,
   operation: Operation,
-): Promise<boolean> =>
-  _apolloClient
+): Promise<boolean> => {
+  console.log(ApolloClient)
+
+  return _apolloClient
     .mutate<RefreshAccessTokenMutation>({
       mutation: RefreshAccessTokenDocument,
     })
@@ -32,3 +34,4 @@ export const refreshAccessToken = (
       localStorage.setItem('access_token', '')
       return false
     })
+}

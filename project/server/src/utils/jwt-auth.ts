@@ -19,7 +19,7 @@ export const createAccessToken = (user: User): string => {
   const accessToken = jwt.sign(
     userData,
     process.env.JWT_SECRET_KEY || DEFAULT_JWT_SECRET_KEY,
-    { expiresIn: '10s' },
+    { expiresIn: '5s' },
   )
   return accessToken
 }
@@ -48,8 +48,8 @@ export const verifyAccessToken = (
     ) as JwtVerifiedUser
     return verified
   } catch (err) {
-    console.error('access_token expired: ', err.expiredAt)
-    throw new AuthenticationError('access token expired')
+    console.error('access_token_expired', err.expiredAt)
+    throw new AuthenticationError('access_token_expired')
   }
 }
 
