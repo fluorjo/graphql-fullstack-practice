@@ -15,4 +15,5 @@ export const isAuthenticated: MiddlewareFn<MyContext> = async (
   verifyAccessToken(accessToken)
 
   if (!context.verifiedUser) throw new AuthenticationError('unauthenticated')
+  return next()
 }

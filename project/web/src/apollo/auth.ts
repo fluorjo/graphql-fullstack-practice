@@ -8,7 +8,7 @@ export const refreshAccessToken = (
   _apolloClient: ApolloClient<NormalizedCacheObject>,
   operation: Operation,
 ): Promise<boolean> => {
-  console.log(ApolloClient)
+  console.log(_apolloClient)
 
   return _apolloClient
     .mutate<RefreshAccessTokenMutation>({
