@@ -10,7 +10,7 @@ export const refreshAccessToken = (
 ): Promise<boolean> => {
   console.log(_apolloClient)
 
-  return _apolloClient
+  return  _apolloClient
     .mutate<RefreshAccessTokenMutation>({
       mutation: RefreshAccessTokenDocument,
     })
@@ -20,6 +20,7 @@ export const refreshAccessToken = (
         localStorage.setItem('access_token', '')
         return false
       }
+
       localStorage.setItem('access_token', newAccessToken)
       const prevContext = operation.getContext()
       operation.setContext({

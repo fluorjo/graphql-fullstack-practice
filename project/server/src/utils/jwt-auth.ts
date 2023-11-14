@@ -19,7 +19,7 @@ export const createAccessToken = (user: User): string => {
   const accessToken = jwt.sign(
     userData,
     process.env.JWT_SECRET_KEY || DEFAULT_JWT_SECRET_KEY,
-    { expiresIn: '300s' },
+    { expiresIn: '10s' },
   )
   return accessToken
 }
@@ -71,11 +71,12 @@ export const verifyAccessTokenFromReqHeaders = (
 export const setRefreshTokenHeader = (
   res: Response,
   refreshToken: string,
-): void => {
-  res.cookie('refreshtoken', refreshToken, {
-    //js 코드로 접근 불가능하게 설정
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-  })
+  ): void => {
+    res.cookie('refreshtoken', refreshToken, {
+      //js 코드로 접근 불가능하게 설정
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    })
+
 }

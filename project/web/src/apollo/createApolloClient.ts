@@ -17,11 +17,11 @@ const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
       if (graphQLErrors.find((err) => err.message === 'access_token_expired')) {
-        console.log('apollo',apolloClient)
         return fromPromise(refreshAccessToken(apolloClient, operation))
           .filter((result) => !!result)
           .flatMap(() => forward(operation))
       }
+      console.log('apollo', apolloClient)
       graphQLErrors.forEach(({ message, locations, path }) =>
         // eslint-disable-next-line no-console
         console.log(
@@ -58,10 +58,12 @@ const authLink = setContext((request, prevContext) => {
   }
 })
 
-export const createApolloClient = (): ApolloClient<NormalizedCacheObject> =>
-  new ApolloClient({
+export const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
+  apolloClient = new ApolloClient({
     cache: createApolloCache(),
     uri: 'http://localhost:4000/graphql',
     //이거 순서대로 해야 authorizaion 헤더가 생성됨.
     link: from([authLink, errorLink, httpLink]),
   })
+  return apolloClient
+}
