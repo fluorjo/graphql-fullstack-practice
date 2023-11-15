@@ -48,7 +48,7 @@ export const verifyAccessToken = (
     ) as JwtVerifiedUser
     return verified
   } catch (err) {
-    console.error('access_token_expired', err.expiredAt)
+    //    console.error('access_token_expired', err.expiredAt)
     throw new AuthenticationError('access_token_expired')
   }
 }
@@ -71,12 +71,11 @@ export const verifyAccessTokenFromReqHeaders = (
 export const setRefreshTokenHeader = (
   res: Response,
   refreshToken: string,
-  ): void => {
-    res.cookie('refreshtoken', refreshToken, {
-      //js 코드로 접근 불가능하게 설정
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-    })
-
+): void => {
+  res.cookie('refreshtoken', refreshToken, {
+    //js 코드로 접근 불가능하게 설정
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+  })
 }
