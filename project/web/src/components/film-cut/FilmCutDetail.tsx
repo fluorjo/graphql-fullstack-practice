@@ -8,14 +8,17 @@ import {
   Image,
   useColorModeValue,
   Text,
+  useToast,
 } from '@chakra-ui/react'
 import { FaHeart } from 'react-icons/fa'
 import {
   CutDocument,
   CutQuery,
   CutQueryVariables,
+  useMeQuery,
   useVoteMutation,
 } from '../../generated/graphql'
+import { useMemo } from 'react'
 
 interface FilmCutDetailProps {
   cutImg: string
@@ -31,6 +34,7 @@ export function FilmCutDetail({
   isVoted = false,
   votesCount = 0,
 }: FilmCutDetailProps): JSX.Element {
+  const toast = useToast()
   const voteButtonColor = useColorModeValue('gray.500', 'gray.400')
   const [vote, { loading: voteLoading }] = useVoteMutation({
     variables: { cutId },
@@ -61,6 +65,13 @@ export function FilmCutDetail({
     },
   })
 
+  const accessToken = localStorage.getItem('access_token')
+  const { data: userData } = useMeQuery({ skip: !accessToken })
+  const isLoggedIn = useMemo(() => {
+    if (accessToken) return userData?.me?.id
+    return false
+  }, [accessToken, userData?.me?.id])
+
   return (
     <Box>
       <AspectRatio ratio={16 / 9}>
@@ -75,10 +86,19 @@ export function FilmCutDetail({
               color={isVoted ? 'pink.400' : voteButtonColor}
               aria-label="like-this-cut-button"
               leftIcon={<FaHeart />}
+              onClick={() => {
+                if (isLoggedIn) vote()
+                else {
+                  toast({
+                    status: 'warning',
+                    description: 'please login first.',
+                  })
+                }
+              }}
               isLoading={voteLoading}
-              onClick={() => vote()}
-            />
-            <Text>{votesCount}</Text>
+            >
+              <Text>{votesCount}</Text>
+            </Button>
             <Button colorScheme="teal">감상 남기기</Button>
           </HStack>
         </Flex>
