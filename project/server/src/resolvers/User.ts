@@ -23,6 +23,7 @@ import {
 } from 'type-graphql'
 import { MyContext } from '../apollo/createApolloServer'
 import { isAuthenticated } from '../middlewares/isAuthenticated'
+import redis from '../redis/redis-client'
 
 @InputType()
 export class SignUpInput {
@@ -113,6 +114,18 @@ export class UserResolver {
     setRefreshTokenHeader(res, refreshToken)
 
     return { user, accessToken }
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuthenticated)
+  async logout(
+    @Ctx() { verifiedUser, res, redis }: MyContext,
+  ): Promise<Boolean> {
+    if (verifiedUser) {
+      setRefreshTokenHeader(res, '')
+      await redis.del(String(verifiedUser.userId))
+    }
+    return true
   }
 
   @Mutation(() => RefreshAccessTokenResponse, { nullable: true })
