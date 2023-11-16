@@ -11,6 +11,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core'
 import { Request, Response } from 'express'
 import redis from '../redis/redis-client'
 import { createCutVoteLoader } from '../dataloaders/cutVoteLoader'
+import { CutReviewResolver } from '../resolvers/CutReview'
 
 export interface MyContext {
   req: Request
@@ -23,7 +24,7 @@ export interface MyContext {
 const createApolloServer = async (): Promise<ApolloServer> => {
   return new ApolloServer<MyContext>({
     schema: await buildSchema({
-      resolvers: [FilmResolver, CutResolver, UserResolver],
+      resolvers: [FilmResolver, CutResolver, UserResolver,CutReviewResolver],
     }),
     plugins: [ApolloServerPluginLandingPageLocalDefault()],
     context: ({ req, res }) => {
