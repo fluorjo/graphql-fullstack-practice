@@ -1,11 +1,14 @@
 import {
   Arg,
+  Args,
+  ArgsType,
   Ctx,
   Field,
   FieldResolver,
   InputType,
   Int,
   Mutation,
+  Query,
   Resolver,
   ResolverInterface,
   Root,
@@ -16,6 +19,7 @@ import { IsInt, IsString } from 'class-validator'
 import { isAuthenticated } from '../middlewares/isAuthenticated'
 import { MyContext } from '../apollo/createApolloServer'
 import User from '../entities/User'
+import { Not } from 'typeorm'
 
 @InputType()
 class CreateOrUpdateCutReviewInput {
@@ -26,6 +30,17 @@ class CreateOrUpdateCutReviewInput {
   @Field({ description: '감상평 내용' })
   @IsString()
   contents: string
+}
+
+@ArgsType()
+class PaginationArgs {
+  @Field(() => Int, { defaultValue: 2 })
+  take: number
+
+  @Field(() => Int, { nullable: true })
+  skip?: number
+
+  @Field(() => Int) cutId: number
 }
 
 @Resolver(CutReview)
@@ -68,6 +83,37 @@ export class CutReviewResolver {
     }))!
   }
 
+  //감상평 쿼리
+  @Query(() => [CutReview])
+  async cutReviews(
+    @Args() { take, skip, cutId }: PaginationArgs,
+    @Ctx() { verifiedUser }: MyContext,
+  ): Promise<CutReview[]> {
+    let realTake = 2
+    let reviewHistory: CutReview | undefined
+    if (verifiedUser && verifiedUser.userId) {
+      reviewHistory = await CutReview.findOne({
+        where: { user: { id: verifiedUser.userId }, cutId },
+      })
+    }
+    if (reviewHistory) {
+      realTake = Math.min(take, 1)
+    }
+    const reviews = await CutReview.find({
+      where: reviewHistory
+        ? {
+            cutId,
+            id: Not(reviewHistory.id),
+          }
+        : { cutId },
+      skip,
+      take: realTake,
+      order: { createdAt: 'DESC' },
+    })
+    if (reviewHistory) return [reviewHistory, ...reviews]
+    return reviews
+  }
+
   @Mutation(() => Boolean)
   @UseMiddleware(isAuthenticated)
   async deleteReview(
@@ -79,6 +125,6 @@ export class CutReviewResolver {
       user: { id: verifiedUser.userId },
     })
     if (result.affected && result.affected > 0) return true
-    return false         
+    return false
   }
 }
