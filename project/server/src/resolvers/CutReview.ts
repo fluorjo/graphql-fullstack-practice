@@ -67,4 +67,18 @@ export class CutReviewResolver {
       },
     }))!
   }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuthenticated)
+  async deleteReview(
+    @Arg('id', () => Int) id: number,
+    @Ctx() { verifiedUser }: MyContext,
+  ): Promise<boolean> {
+    const result = await CutReview.delete({
+      id,
+      user: { id: verifiedUser.userId },
+    })
+    if (result.affected && result.affected > 0) return true
+    return false         
+  }
 }
