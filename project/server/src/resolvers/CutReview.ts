@@ -61,8 +61,10 @@ export class CutReviewResolver {
   // 필드리졸버 User
   @FieldResolver(() => User)
   async user(@Root() cutReview: CutReview): Promise<User> {
-    return (await User.findOneBy({
-      id: cutReview.userId,
+    return (await User.findOne({
+      where: {
+        id: cutReview.userId,
+      },
     }))!
   }
 }
