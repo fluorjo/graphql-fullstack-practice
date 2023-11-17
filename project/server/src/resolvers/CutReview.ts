@@ -85,19 +85,21 @@ export class CutReviewResolver implements ResolverInterface<CutReview> {
 
   //감상평 쿼리
   @Query(() => [CutReview])
+
+
   async cutReviews(
     @Args() { take, skip, cutId }: PaginationArgs,
     @Ctx() { verifiedUser }: MyContext,
   ): Promise<CutReview[]> {
-    let realTake = 2
-    let reviewHistory: CutReview | undefined
+    let realTake = 2;
+    let reviewHistory: CutReview | undefined;
     if (verifiedUser && verifiedUser.userId) {
       reviewHistory = await CutReview.findOne({
         where: { user: { id: verifiedUser.userId }, cutId },
-      })
+      });
     }
     if (reviewHistory) {
-      realTake = Math.min(take, 1)
+      realTake = Math.min(take, 1);
     }
     const reviews = await CutReview.find({
       where: reviewHistory
@@ -109,9 +111,10 @@ export class CutReviewResolver implements ResolverInterface<CutReview> {
       skip,
       take: realTake,
       order: { createdAt: 'DESC' },
-    })
-    if (reviewHistory) return [reviewHistory, ...reviews]
-    return reviews
+    });
+
+    if (reviewHistory) return [reviewHistory, ...reviews];
+    return reviews;
   }
 
   @Mutation(() => Boolean)
