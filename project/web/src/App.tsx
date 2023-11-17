@@ -12,6 +12,7 @@ import Login from './pages/Login'
 const apolloClient = createApolloClient()
 
 export const App: React.FC = () => {
+
   return (
     <ApolloProvider client={apolloClient}>
       <ChakraProvider theme={theme}>

@@ -12,12 +12,12 @@ import {
 import User from './User';
 
 @ObjectType()
+
 @Entity()
 export class CutReview extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   id: number;
-
   @Field({ description: '감상평 내용' })
   @Column({ comment: '감상평 내용' })
   contents: string;

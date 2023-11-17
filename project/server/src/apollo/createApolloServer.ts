@@ -19,7 +19,7 @@ export interface MyContext {
   verifiedUser: JwtVerifiedUser
   redis: typeof redis
   cutVoteLoader: ReturnType<typeof createCutVoteLoader>
-  forbidUnknownValues: false;
+
 
 }
 
@@ -27,7 +27,9 @@ const createApolloServer = async (): Promise<ApolloServer> => {
   return new ApolloServer<MyContext>({
     schema: await buildSchema({
       resolvers: [FilmResolver, CutResolver, UserResolver, CutReviewResolver],
+      validate: false, // Disable built-in validation to use custom validation
     }),
+
     plugins: [ApolloServerPluginLandingPageLocalDefault()],
     context: ({ req, res }) => {
       const verified = verifyAccessTokenFromReqHeaders(req.headers)
