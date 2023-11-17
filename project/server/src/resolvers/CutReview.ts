@@ -44,7 +44,7 @@ class PaginationArgs {
 }
 
 @Resolver(CutReview)
-export class CutReviewResolver {
+export class CutReviewResolver implements ResolverInterface<CutReview> {
   @Mutation(() => CutReview, { nullable: true })
   @UseMiddleware(isAuthenticated)
   async createOrUpdateCutReview(
