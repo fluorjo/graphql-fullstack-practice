@@ -83,23 +83,30 @@ export class CutReviewResolver {
     }))!
   }
 
+  @FieldResolver(() => Boolean)
+  isMine(
+    @Root() cutReview: CutReview,
+    @Ctx() { verifiedUser }: MyContext,
+  ): boolean {
+    if (!verifiedUser) return false
+    return cutReview.userId === verifiedUser.userId
+  }
+
   //감상평 쿼리
   @Query(() => [CutReview])
-
-
   async cutReviews(
     @Args() { take, skip, cutId }: PaginationArgs,
     @Ctx() { verifiedUser }: MyContext,
   ): Promise<CutReview[]> {
-    let realTake = 2;
-    let reviewHistory: CutReview | undefined;
+    let realTake = 2
+    let reviewHistory: CutReview | undefined
     if (verifiedUser && verifiedUser.userId) {
       reviewHistory = await CutReview.findOne({
         where: { user: { id: verifiedUser.userId }, cutId },
-      });
+      })
     }
     if (reviewHistory) {
-      realTake = Math.min(take, 1);
+      realTake = Math.min(take, 1)
     }
     const reviews = await CutReview.find({
       where: reviewHistory
@@ -111,10 +118,10 @@ export class CutReviewResolver {
       skip,
       take: realTake,
       order: { createdAt: 'DESC' },
-    });
+    })
 
-    if (reviewHistory) return [reviewHistory, ...reviews];
-    return reviews;
+    if (reviewHistory) return [reviewHistory, ...reviews]
+    return reviews
   }
 
   @Mutation(() => Boolean)

@@ -19,8 +19,6 @@ export interface MyContext {
   verifiedUser: JwtVerifiedUser
   redis: typeof redis
   cutVoteLoader: ReturnType<typeof createCutVoteLoader>
-
-
 }
 
 const createApolloServer = async (): Promise<ApolloServer> => {
