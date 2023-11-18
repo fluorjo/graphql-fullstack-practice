@@ -30,7 +30,7 @@ export function FilmCutReviewRegiModal({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      cutReviewInput: { cutId },
+      cutReviewInput: { cutId, contents: '' },
     },
   })
   function onSubmit(formData: any): void {
