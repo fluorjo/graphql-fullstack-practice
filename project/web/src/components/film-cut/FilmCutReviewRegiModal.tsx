@@ -43,14 +43,44 @@ export function FilmCutReviewRegiModal({
     },
   })
   function onSubmit(formData: CutReviewVars): void {
-    mutation({variables:formData})
-    .then((res)=>{
-      console.log(res.data)
-      onClose()
+    mutation({
+      variables: formData,
+      update: (cache, { data }) => {
+        if (data && data.createOrUpdateCutReview) {
+          const currentCut = cache.readQuery<CutQuery>({
+            query: CutDocument,
+            variables: { cutId },
+          })
+          if (currentCut) {
+            const isEdited = currentCut.cutReviews
+              .map((review) => review.id)
+              .includes(data.createOrUpdateCutReview.id)
+            if (isEdited) {
+              cache.evict({
+                id: `CutReview:${data.createOrUpdateCutReview.id}`,
+              })
+            }
+            cache.writeQuery<CutQuery>({
+              query: CutDocument,
+              data: {
+                ...currentCut,
+                cutReviews: isEdited
+                  ? [...currentCut.cutReviews]
+                  : [
+                      data.createOrUpdateCutReview,
+                      ...currentCut.cutReviews.slice(0, 1),
+                    ],
+              },
+              variables: { cutId },
+            })
+          }
+        }
+      },
     })
-    .catch(()=>{
-      toast({title:'submit failed'})
-    })
+      .then(onClose)
+      .catch(() => {
+        toast({ title: 'submit failed', status: 'error' })
+      })
   }
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose}>
