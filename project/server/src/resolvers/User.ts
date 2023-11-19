@@ -1,12 +1,12 @@
 import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
+import { createWriteStream } from 'fs';
 
 import {
   createAccessToken,
   createRefreshToken,
   REFRESH_JWT_SECRET_KEY,
   setRefreshTokenHeader,
-  //setRefreshTokenHeader,
 } from '../utils/jwt-auth'
 import User from '../entities/User'
 import { IsEmail, IsString } from 'class-validator'
@@ -24,6 +24,7 @@ import {
 import { MyContext } from '../apollo/createApolloServer'
 import { isAuthenticated } from '../middlewares/isAuthenticated'
 import redis from '../redis/redis-client'
+import { FileUpload, GraphQLUpload } from 'graphql-upload'
 
 @InputType()
 export class SignUpInput {
@@ -163,5 +164,28 @@ export class UserResolver {
       sameSite: 'lax',
     })
     return { accessToken: newAccessToken }
+  }
+  @UseMiddleware(isAuthenticated)
+  @Mutation(() => Boolean)
+  async uploadProfileImage(
+    @Ctx() { verifiedUser }: MyContext,
+    @Arg('file', () => GraphQLUpload)
+    { createReadStream, filename }: FileUpload,
+  ): Promise<boolean> {
+    const realFileName = verifiedUser.userId + filename;
+    const filePath = `public/${realFileName}`;
+
+    return new Promise((resolve, reject) =>
+      createReadStream()
+        .pipe(createWriteStream(filePath))
+        .on('finish', async () => {
+          await User.update(
+            { id: verifiedUser.userId },
+            { profileImage: realFileName },
+          );
+          return resolve(true);
+        })
+        .on('error', () => reject(Error('file upload failed'))),
+    );
   }
 }

@@ -39,7 +39,11 @@ export default class User extends BaseEntity {
 
   @OneToMany(() => CutVote, (cutVote) => cutVote.user)
   cutVotes: CutVote[]
-  
+
   @OneToMany(() => CutReview, (cutReview) => cutReview.user)
   cutReviews: CutReview[]
+
+  @Column({ comment: '프로필 사진 경로', nullable: true })
+  @Field({ description: '프로필 사진 경로', nullable: true })
+  profileImage: string
 }
