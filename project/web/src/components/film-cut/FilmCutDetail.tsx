@@ -24,6 +24,7 @@ import {
 import { useMemo } from 'react'
 import { FilmCutReviewRegiModal } from './FilmCutReviewRegiModal'
 import { FilmCutReview } from './FilmCutReview'
+import FilmCutReviewDeleteAlert from './FilmCutReviewDelete'
 
 interface FilmCutDetailProps {
   cutImg: string
@@ -140,6 +141,11 @@ export function FilmCutDetail({
         cutId={cutId}
         isOpen={reviewRegiDialog.isOpen}
         onClose={reviewRegiDialog.onClose}
+      />
+      <FilmCutReviewDeleteAlert
+        target={reviews?.find((review) => review.isMine)}
+        isOpen={deleteAlert.isOpen}
+        onClose={deleteAlert.onClose}
       />
     </Box>
   )
