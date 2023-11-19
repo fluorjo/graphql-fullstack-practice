@@ -23,6 +23,7 @@ import {
 } from '../../generated/graphql'
 import { useMemo } from 'react'
 import { FilmCutReviewRegiModal } from './FilmCutReviewRegiModal'
+import { FilmCutReview } from './FilmCutReview'
 
 interface FilmCutDetailProps {
   cutImg: string
