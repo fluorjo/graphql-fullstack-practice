@@ -10,8 +10,15 @@ import {
   ModalHeader,
   ModalOverlay,
   Textarea,
+  useToast,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
+import {
+  CreateOrUpdateCutReviewMutationVariables as CutReviewVars,
+  CutDocument,
+  CutQuery,
+  useCreateOrUpdateCutReviewMutation as useCreateCutReview,
+} from '../../generated/graphql'
 
 export interface FilmCutReviewRegiModalProps {
   cutId: number
@@ -24,6 +31,8 @@ export function FilmCutReviewRegiModal({
   isOpen,
   onClose,
 }: FilmCutReviewRegiModalProps): JSX.Element {
+  const toast = useToast()
+  const [mutation, { loading }] = useCreateCutReview()
   const {
     register,
     handleSubmit,
@@ -33,8 +42,15 @@ export function FilmCutReviewRegiModal({
       cutReviewInput: { cutId, contents: '' },
     },
   })
-  function onSubmit(formData: any): void {
-    console.log(formData)
+  function onSubmit(formData: CutReviewVars): void {
+    mutation({variables:formData})
+    .then((res)=>{
+      console.log(res.data)
+      onClose()
+    })
+    .catch(()=>{
+      toast({title:'submit failed'})
+    })
   }
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose}>

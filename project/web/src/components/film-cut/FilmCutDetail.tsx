@@ -10,6 +10,8 @@ import {
   Text,
   useToast,
   useDisclosure,
+  Center,
+  SimpleGrid,
 } from '@chakra-ui/react'
 import { FaHeart } from 'react-icons/fa'
 import {
@@ -27,7 +29,7 @@ interface FilmCutDetailProps {
   cutId: number
   isVoted?: boolean
   votesCount?: number
-  //  reviews: CutQuery['cutReviews']
+  reviews: CutQuery['cutReviews']
 }
 
 export function FilmCutDetail({
@@ -35,6 +37,7 @@ export function FilmCutDetail({
   cutId,
   isVoted = false,
   votesCount = 0,
+  reviews,
 }: FilmCutDetailProps): JSX.Element {
   const toast = useToast()
   const voteButtonColor = useColorModeValue('gray.500', 'gray.400')
@@ -75,6 +78,7 @@ export function FilmCutDetail({
   }, [accessToken, userData?.me?.id])
 
   const reviewRegiDialog = useDisclosure()
+  const deleteAlert = useDisclosure()
 
   return (
     <Box>
@@ -108,6 +112,28 @@ export function FilmCutDetail({
             </Button>
           </HStack>
         </Flex>
+
+        {/*감상 목록 */}
+        <Box mt={6}>
+          {!reviews || reviews.length === 0 ? (
+            <Center minH={100}>
+              <Text>leave review</Text>
+            </Center>
+          ) : (
+            <SimpleGrid mt={3} spacing={4} columns={{ base: 1, sm: 2 }}>
+              {reviews.slice(0, 2).map((review) => (
+                <FilmCutReview
+                  key={review.id}
+                  author={review.user.username}
+                  contents={review.contents}
+                  isMine={review.isMine}
+                  onEditClick={reviewRegiDialog.onOpen}
+                  onDeleteClick={deleteAlert.onOpen}
+                />
+              ))}
+            </SimpleGrid>
+          )}
+        </Box>
       </Box>
       <FilmCutReviewRegiModal
         cutId={cutId}

@@ -55,7 +55,7 @@ function FilmCutModal({
               cutId={data.cut.id}
               votesCount={data.cut.votesCount}
               isVoted={data.cut.isVoted}
-              //reviews={data.cutReviews}
+              reviews={data.cutReviews}
             />
           )}
         </ModalBody>
