@@ -9,3 +9,5 @@
 
 
 - [graphql-upload import 안됨- 다운그레이드](https://velog.io/@kim_truee/5-graphql-upload%EC%99%80-%EC%8B%B8%EC%9B%A0%EB%8B%A4)
+
+- https://stackoverflow.com/questions/64063434/new-expression-whose-target-lacks-a-construct-signature-implicitly-has-an-a

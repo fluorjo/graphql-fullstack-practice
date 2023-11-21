@@ -9,6 +9,7 @@ import { onError } from '@apollo/client/link/error'
 import { createApolloCache } from './createApolloCache'
 import { setContext } from '@apollo/client/link/context'
 import { refreshAccessToken } from './auth'
+import { createUploadLink } from 'apollo-upload-client'
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
 
@@ -43,7 +44,7 @@ const errorLink = onError(
   },
 )
 
-const httpLink = new HttpLink({
+const httpLinkUploadLink = new (createUploadLink as any)({
   uri: 'http://localhost:4000/graphql',
   credentials: 'include',
 })
@@ -63,7 +64,7 @@ export const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
     cache: createApolloCache(),
     uri: 'http://localhost:4000/graphql',
     //이거 순서대로 해야 authorizaion 헤더가 생성됨.
-    link: from([authLink, errorLink, httpLink]),
+    link: from([authLink, errorLink, httpLinkUploadLink as any]),
   })
   return apolloClient
 }
