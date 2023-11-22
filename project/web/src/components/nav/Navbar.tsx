@@ -13,7 +13,11 @@ import {
 } from '@chakra-ui/react'
 import { Link as RouterLink } from 'react-router-dom'
 import { ColorModeSwitcher } from '../ColorModeSwitcher'
-import { useMeQuery, useLogoutMutation } from '../../generated/graphql'
+import {
+  useMeQuery,
+  useLogoutMutation,
+  useUploadProfileImageMutation,
+} from '../../generated/graphql'
 import { useMemo } from 'react'
 import { idText } from 'typescript'
 import { useApolloClient } from '@apollo/client'
@@ -31,6 +35,27 @@ const LoggedInNavbarItem = (): JSX.Element => {
       console.log(e)
     }
   }
+
+  const [upload] = useUploadProfileImageMutation()
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files) {
+      const file = e.target.files[0]
+      await upload({
+        variables: { file },
+        update: (cache) => {
+          cache.evict({ fieldName: 'me' })
+        },
+      })
+    }
+  }
+  const accessToken = localStorage.getItem('access_token')
+  const { data } = useMeQuery({ skip: !accessToken })
+  const profileImage = useMemo(() => {
+    if (data?.me?.profileImage) {
+      return 'http://localhost:4000/' + data?.me?.profileImage
+    }
+    return ''
+  }, [data])
 
   return (
     <Stack
