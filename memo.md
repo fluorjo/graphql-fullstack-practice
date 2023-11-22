@@ -7,7 +7,9 @@
 
 - 감상평 삭제 후 바로 반영이 안 된다. 왜일까?
 
-
 - [graphql-upload import 안됨- 다운그레이드](https://velog.io/@kim_truee/5-graphql-upload%EC%99%80-%EC%8B%B8%EC%9B%A0%EB%8B%A4)
 
 - https://stackoverflow.com/questions/64063434/new-expression-whose-target-lacks-a-construct-signature-implicitly-has-an-a
+
+- 최신 버전 apollo upload client에서 createuploadlink import 안 되는 문제
+- https://github.com/jaydenseric/apollo-upload-client?tab=readme-ov-file#exports

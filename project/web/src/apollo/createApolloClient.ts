@@ -9,8 +9,8 @@ import { onError } from '@apollo/client/link/error'
 import { createApolloCache } from './createApolloCache'
 import { setContext } from '@apollo/client/link/context'
 import { refreshAccessToken } from './auth'
-import { createUploadLink } from 'apollo-upload-client'
 
+import { createUploadLink } from 'apollo-upload-client'
 let apolloClient: ApolloClient<NormalizedCacheObject>
 
 const errorLink = onError(
