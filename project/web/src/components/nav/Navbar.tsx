@@ -10,6 +10,7 @@ import {
   Menu,
   MenuList,
   MenuItem,
+  Text
 } from '@chakra-ui/react'
 import { Link as RouterLink } from 'react-router-dom'
 import { ColorModeSwitcher } from '../ColorModeSwitcher'
@@ -72,11 +73,27 @@ const LoggedInNavbarItem = (): JSX.Element => {
           variant={'link'}
           cursor={'pointer'}
         >
-          <Avatar size="sm" />
+          <Avatar size="sm" src={profileImage} />
         </MenuButton>
-        <MenuList>
+        <MenuList minW={300}>
+          <Flex px={4} pt={2} pb={4}>
+            <label htmlFor="upload-profile-image">
+              <input
+                id="upload-profile-image"
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={handleImageUpload}
+              />
+              <Avatar size="md" src={profileImage} mr={4} cursor="pointer" />
+            </label>
+            <Box>
+              <Text fontWeight="bold">{data?.me?.username}</Text>
+              <Text>{data?.me?.email}</Text>
+            </Box>
+          </Flex>
           <MenuItem isDisabled={logoutLoading} onClick={onLogoutClick}>
-            Logout
+            로그아웃
           </MenuItem>
         </MenuList>
       </Menu>
