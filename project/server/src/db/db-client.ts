@@ -2,6 +2,7 @@ import { DataSource } from 'typeorm'
 import User from '../entities/User'
 import { CutVote } from '../entities/Cutvote'
 import { CutReview } from '../entities/CutReview'
+import Notification from '../entities/notification'
 // import { CutReview } from '../entities/CutReview'
 // import { CutVote } from '../entities/CutVote'
 // import Notification from '../entities/Notification'
@@ -16,7 +17,7 @@ export const createDB = new DataSource({
   synchronize: true, // entities에 명시된 데이터 모델들을 DB에 자동으로 동기화합니다.
   //데이터 분실, 수정 위험을 방지하기 위해 migration 기능 이용해야 함.
 
-  entities: [User,CutVote,CutReview],
+  entities: [User, CutVote, CutReview, Notification],
   // entities 폴더의 모든 데이터 모델이 위치해야 합니다.
   // entities: [User, CutVote, CutReview, Notification],
 

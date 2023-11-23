@@ -10,6 +10,7 @@ import {
 } from 'typeorm'
 import { CutVote } from './Cutvote'
 import { CutReview } from './CutReview'
+import Notification from './notification'
 
 @ObjectType()
 @Entity()
@@ -42,6 +43,9 @@ export default class User extends BaseEntity {
 
   @OneToMany(() => CutReview, (cutReview) => cutReview.user)
   cutReviews: CutReview[]
+
+  @OneToMany(() => Notification, (noti) => noti.user)
+  notifications: Notification[]
 
   @Column({ comment: '프로필 사진 경로', nullable: true })
   @Field({ description: '프로필 사진 경로', nullable: true })
