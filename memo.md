@@ -13,3 +13,4 @@
 
 - 최신 버전 apollo upload client에서 createuploadlink import 안 되는 문제
 - https://github.com/jaydenseric/apollo-upload-client?tab=readme-ov-file#exports
+- mjs?까지 import 해도 안 되는데 어쩌면 nodejs 버전 문제일지도.
