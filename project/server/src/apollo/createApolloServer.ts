@@ -12,6 +12,7 @@ import { Request, Response } from 'express'
 import redis from '../redis/redis-client'
 import { createCutVoteLoader } from '../dataloaders/cutVoteLoader'
 import { CutReviewResolver } from '../resolvers/CutReview'
+import { GraphQLSchema } from 'graphql'
 
 export interface MyContext {
   req: Request
@@ -20,14 +21,11 @@ export interface MyContext {
   redis: typeof redis
   cutVoteLoader: ReturnType<typeof createCutVoteLoader>
 }
-
-const createApolloServer = async (): Promise<ApolloServer> => {
+const createApolloServer = async (
+  schema: GraphQLSchema,
+): Promise<ApolloServer> => {
   return new ApolloServer<MyContext>({
-    schema: await buildSchema({
-      resolvers: [FilmResolver, CutResolver, UserResolver, CutReviewResolver],
-      validate: false, // Disable built-in validation to use custom validation
-    }),
-
+    schema,
     plugins: [ApolloServerPluginLandingPageLocalDefault()],
     context: ({ req, res }) => {
       const verified = verifyAccessTokenFromReqHeaders(req.headers)
