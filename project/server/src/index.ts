@@ -42,8 +42,6 @@ async function main() {
     },
   })
 
-  const httpServer = http.createServer(app)
-
   httpServer.listen(process.env.PORT || 4000, () => {
     if (process.env.NODE_ENV !== 'production') {
       console.log(`
