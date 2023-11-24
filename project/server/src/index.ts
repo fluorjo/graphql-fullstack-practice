@@ -9,6 +9,8 @@ import 'reflect-metadata'
 import createApolloServer from './apollo/createApolloServer'
 import cookieParser from 'cookie-parser'
 import { graphqlUploadExpress } from 'graphql-upload'
+import { createSchema } from './apollo/createSchema';
+import { createSubscriptionServer } from './apollo/createSubscriptionServer';
 
 async function main() {
   createDB
@@ -24,8 +26,12 @@ async function main() {
   app.use(express.static('public'))
   app.use(cookieParser())
   app.use(graphqlUploadExpress({ maxFileSize: 1024 * 1000 * 5, maxFiles: 1 }))
+    
+  const httpServer = http.createServer(app);
 
-  const apolloServer = await createApolloServer()
+  const schema = await createSchema();
+  await createSubscriptionServer(schema, httpServer);
+  const apolloServer = await createApolloServer(schema);
 
   await apolloServer.start()
   apolloServer.applyMiddleware({

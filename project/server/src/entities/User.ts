@@ -10,7 +10,7 @@ import {
 } from 'typeorm'
 import { CutVote } from './Cutvote'
 import { CutReview } from './CutReview'
-import Notification from './notification'
+import Notification from './Notification'
 
 @ObjectType()
 @Entity()

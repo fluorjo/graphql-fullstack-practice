@@ -2,11 +2,7 @@ import { DataSource } from 'typeorm'
 import User from '../entities/User'
 import { CutVote } from '../entities/Cutvote'
 import { CutReview } from '../entities/CutReview'
-import Notification from '../entities/notification'
-// import { CutReview } from '../entities/CutReview'
-// import { CutVote } from '../entities/CutVote'
-// import Notification from '../entities/Notification'
-// import User from '../entities/User'
+import Notification from '../entities/Notification';
 
 export const createDB = new DataSource({
   type: 'mysql',
