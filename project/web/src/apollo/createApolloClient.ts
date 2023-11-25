@@ -4,6 +4,7 @@ import {
   from,
   HttpLink,
   fromPromise,
+  split,
 } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 import { createApolloCache } from './createApolloCache'
@@ -11,6 +12,9 @@ import { setContext } from '@apollo/client/link/context'
 import { refreshAccessToken } from './auth'
 
 import { createUploadLink } from 'apollo-upload-client'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
+
 let apolloClient: ApolloClient<NormalizedCacheObject>
 
 const errorLink = onError(
@@ -44,7 +48,7 @@ const errorLink = onError(
   },
 )
 
-const httpLinkUploadLink = new (createUploadLink as any)({
+const httpUploadLink = new (createUploadLink as any)({
   uri: 'http://localhost:4000/graphql',
   credentials: 'include',
 })
@@ -58,13 +62,38 @@ const authLink = setContext((request, prevContext) => {
     },
   }
 })
+const wsLink = new WebSocketLink({
+  uri: `${process.env.REACT_APP_API_SUBSCRIPTION_HOST}/graphql`,
+  options: {
+    reconnect: true,
+    connectionParams: () => {
+      const accessToken = localStorage.getItem('access_token')
+      return {
+        Authorization: accessToken ? `Bearer ${accessToken}` : '',
+      }
+    },
+  },
+})
 
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query)
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    )
+  },
+  from([wsLink]),
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  from([authLink, errorLink, httpUploadLink as any]),
+)
 export const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
   apolloClient = new ApolloClient({
     cache: createApolloCache(),
     uri: 'http://localhost:4000/graphql',
     //이거 순서대로 해야 authorizaion 헤더가 생성됨.
-    link: from([authLink, errorLink, httpLinkUploadLink as any]),
+    link: splitLink,
   })
   return apolloClient
 }
