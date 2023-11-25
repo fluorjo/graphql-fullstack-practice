@@ -3,8 +3,8 @@ import {
   Ctx,
   Int,
   Mutation,
-  PubSub,
   Publisher,
+  PubSub,
   Query,
   Resolver,
   ResolverFilterData,
@@ -12,16 +12,16 @@ import {
   Subscription,
   UseMiddleware,
 } from 'type-graphql'
-import Notification from '../entities/notification'
-import { isAuthenticated } from '../middlewares/isAuthenticated'
 import { MyContext } from '../apollo/createApolloServer'
+import Notification from '../entities/Notification'
+import { isAuthenticated } from '../middlewares/isAuthenticated'
 
 @Resolver(Notification)
 export class NotificationResolver {
-  @Query(() => [Notification], {
-    description: '세션에 해당되는 유저의 모든 알림을 가져옴',
-  })
   @UseMiddleware(isAuthenticated)
+  @Query(() => [Notification], {
+    description: '세션에 해당되는 유저의 모든 알림을 가져옵니다.',
+  })
   async notifications(
     @Ctx() { verifiedUser }: MyContext,
   ): Promise<Notification[]> {
@@ -46,6 +46,7 @@ export class NotificationResolver {
     await publish(newNoti)
     return newNoti
   }
+
   @Subscription({
     topics: 'NOTIFICATION_CREATED',
     // 자기 자신에게 온 알림이 생성되었을 때만 실행되어야 함.

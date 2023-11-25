@@ -19,14 +19,14 @@ export default class Notification extends BaseEntity {
 
   @Field()
   @Column({ type: 'varchar' })
-  Text: string
+  text: string
 
   @Field(() => String) @CreateDateColumn() createdAt: Date
 
   @Field(() => String) @UpdateDateColumn() UpdatedAt: Date
-  
+
   @Field() @Column() userId!: number
 
-  @ManyToOne(()=>User,(user)=>user.notifications)
-  user:User
+  @ManyToOne(() => User, (user) => user.notifications)
+  user: User
 }
