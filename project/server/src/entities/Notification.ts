@@ -23,7 +23,7 @@ export default class Notification extends BaseEntity {
 
   @Field(() => String) @CreateDateColumn() createdAt: Date
 
-  @Field(() => String) @UpdateDateColumn() UpdatedAt: Date
+  @Field(() => String) @UpdateDateColumn() updatedAt: Date
 
   @Field() @Column() userId!: number
 
