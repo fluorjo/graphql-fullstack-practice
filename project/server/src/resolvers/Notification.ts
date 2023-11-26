@@ -15,6 +15,7 @@ import {
 import { MyContext } from '../apollo/createApolloServer'
 import Notification from '../entities/Notification'
 import { isAuthenticated } from '../middlewares/isAuthenticated'
+import { MySubscriptionContext } from '../apollo/createSubscriptionServer'
 
 @Resolver(Notification)
 export class NotificationResolver {
@@ -49,19 +50,19 @@ export class NotificationResolver {
 
   @Subscription({
     topics: 'NOTIFICATION_CREATED',
-    // 자기 자신에게 온 알림이 생성되었을 때만 실행되어야 함.
+    // 자기 자신에게 온 알림이 생성되었을 때만 실행
     filter: ({
       payload,
       context,
-    }: ResolverFilterData<Notification, null, MyContext>) => {
-      console.log('newNotification context: ', context)
-      return true
-      // if (payload && payload.userId === auth.userId) return true;
-      // return false;
+    }: ResolverFilterData<Notification, null, MySubscriptionContext>) => {
+      const { verifiedUser } = context
+      if (verifiedUser && payload && payload.userId === verifiedUser.userId) {
+        return true
+      }
+      return false
     },
   })
   newNotification(@Root() notificationPayload: Notification): Notification {
-    // console.log('newNotification - ctx: ', ctx);
     return notificationPayload
   }
 }
