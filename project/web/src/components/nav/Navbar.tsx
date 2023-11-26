@@ -10,7 +10,7 @@ import {
   Menu,
   MenuList,
   MenuItem,
-  Text
+  Text,
 } from '@chakra-ui/react'
 import { Link as RouterLink } from 'react-router-dom'
 import { ColorModeSwitcher } from '../ColorModeSwitcher'
@@ -22,6 +22,7 @@ import {
 import { useMemo } from 'react'
 import { idText } from 'typescript'
 import { useApolloClient } from '@apollo/client'
+import Notification from '../notification/Notification'
 
 const LoggedInNavbarItem = (): JSX.Element => {
   const client = useApolloClient()
@@ -66,6 +67,8 @@ const LoggedInNavbarItem = (): JSX.Element => {
       spacing={3}
     >
       <ColorModeSwitcher />
+      <Notification />
+
       <Menu>
         <MenuButton
           as={Button}
