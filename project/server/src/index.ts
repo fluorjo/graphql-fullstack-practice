@@ -28,6 +28,9 @@ async function main() {
   app.use(express.static('public'))
   app.use(cookieParser())
   app.use(graphqlUploadExpress({ maxFileSize: 1024 * 1000 * 5, maxFiles: 1 }))
+  app.get('/', (req, res) => {
+    res.status(200).send()
+  })
 
   const httpServer = http.createServer(app)
 
