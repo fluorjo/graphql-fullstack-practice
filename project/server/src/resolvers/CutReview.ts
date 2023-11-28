@@ -103,7 +103,7 @@ export class CutReviewResolver {
     if (verifiedUser && verifiedUser.userId) {
       reviewHistory = await CutReview.findOne({
         where: { user: { id: verifiedUser.userId }, cutId },
-      })
+      })||undefined
     }
     if (reviewHistory) {
       realTake = Math.min(take, 1)
