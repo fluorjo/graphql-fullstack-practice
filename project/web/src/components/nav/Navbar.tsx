@@ -23,6 +23,7 @@ import { useMemo } from 'react'
 import { idText } from 'typescript'
 import { useApolloClient } from '@apollo/client'
 import Notification from '../notification/Notification'
+import React from 'react'
 
 const LoggedInNavbarItem = (): JSX.Element => {
   const client = useApolloClient()
@@ -54,7 +55,8 @@ const LoggedInNavbarItem = (): JSX.Element => {
   const { data } = useMeQuery({ skip: !accessToken })
   const profileImage = useMemo(() => {
     if (data?.me?.profileImage) {
-      return 'http://localhost:4000/' + data?.me?.profileImage
+      // return 'http://localhost:4000/' + data?.me?.profileImage
+      return `${process.env.REACT_APP_API_HOST}/${data?.me?.profileImage}`
     }
     return ''
   }, [data])

@@ -49,7 +49,8 @@ const errorLink = onError(
 )
 
 const httpUploadLink = new (createUploadLink as any)({
-  uri: 'http://localhost:4000/graphql',
+  //uri: 'http://localhost:4000/graphql',
+  uri: `${process.env.REACT_APP_API_HOST}/graphql`,
   credentials: 'include',
 })
 
@@ -63,8 +64,8 @@ const authLink = setContext((request, prevContext) => {
   }
 })
 const wsLink = new WebSocketLink({
-  //  uri: `${process.env.REACT_APP_API_SUBSCRIPTION_HOST}/graphql`,
-  uri: 'ws://localhost:4000/graphql',
+  // uri: 'ws://localhost:4000/graphql',
+  uri: `${process.env.REACT_APP_API_SUBSCRIPTION_HOST}/graphql`,
   options: {
     reconnect: true,
     connectionParams: () => {
@@ -92,7 +93,8 @@ const splitLink = split(
 export const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
   apolloClient = new ApolloClient({
     cache: createApolloCache(),
-    uri: 'http://localhost:4000/graphql',
+    // uri: 'http://localhost:4000/graphql',
+    uri: `${process.env.REACT_APP_API_HOST}/graphql`,
     //이거 순서대로 해야 authorizaion 헤더가 생성됨.
     link: splitLink,
   })
